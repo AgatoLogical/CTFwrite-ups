@@ -35,4 +35,26 @@ In the head segment, we notice that the css file is located in the assets direct
 However, it does not forbid access, just doesn't display anything. Checking the network monitor, we notice that the request header sets the PHPSESSID cookie.
 >
 ![image](https://github.com/user-attachments/assets/263dc627-0ae8-4635-87b7-fec281231c31)
+>
+Checking for a default file index.php, we see that the server returns 200 in response, hence confirming there exists a valid php file. Now, we can use ffuf to see if we find any valid GET parameters for that file.
+>
+![image](https://github.com/user-attachments/assets/b76624c6-774c-4cf1-8826-95e267dbd08f)
+>
+After noticing that cmd is one of the valid parameters, we can try to use it to create a reverse shell. First, we confirm the validity of cmd.
+>
+![image](https://github.com/user-attachments/assets/e1314f1d-49b5-4eee-b5a8-b1c86d86b632)
+>
+The response is encoded in Base64 format, after decoding, we get a valid result: www-data. Since the server indeed returns a valid response, we can now proceed to creating a reverse shell.  
 
+### Reverse Shell
+Before we send the malicious payload to the target machine, we start a netcat listener on our device. 
+>
+![image](https://github.com/user-attachments/assets/87239210-09e2-49ea-a2f6-081e2ac10af1)
+>
+Once that is done, we gain the reverse shell access by passing the cmd injection as a parameter:
+>
+![image](https://github.com/user-attachments/assets/d2d8cb92-103d-4dfe-b4fa-8d03ef7343a1)
+>
+We check that our listener detected an incoming connection and we successfully gained a reverse shell. 
+>
+![image](https://github.com/user-attachments/assets/a62df013-9850-42e8-968c-d244f185808a)
